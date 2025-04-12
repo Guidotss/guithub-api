@@ -1,73 +1,72 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## ✅ Tareas pendientes
 
-## Description
+### 🧠 Conceptos y decisiones clave
+- [x] Usaremos `git-http-backend` para el acceso vía HTTP.
+- [ ] También se integrará acceso vía SSH (ver detalles más abajo).
+- [x] Se utilizará PostgreSQL como base de datos principal.
+- [ ] Definir estructura de disco para repos (ej: `/var/guithub/repos/<user>/<repo>.git`).
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Installation
+### 🔐 Autenticación y usuarios
+- [ ] Endpoint de registro (`POST /auth/register`)
+- [ ] Endpoint de login (`POST /auth/login`)
+- [ ] Middleware JWT para proteger rutas privadas
+- [ ] Gestión de claves SSH por usuario (alta y baja)
+- [ ] Modelo de usuarios en PostgreSQL (id, username, password hash, email, ssh_keys[])
 
-```bash
-$ yarn install
-```
+---
 
-## Running the app
+### 🗃️ Gestión de repositorios
+- [ ] Endpoint para crear repo (`POST /repos`)
+- [ ] Crear repo *bare* localmente con `git init --bare`
+- [ ] Asignar permisos por usuario para HTTP y SSH
+- [ ] Tabla repos (id, user_id, path, name, created_at)
 
-```bash
-# development
-$ yarn run start
+---
 
-# watch mode
-$ yarn run start:dev
+### 🌐 Acceso Git vía HTTP (con `git-http-backend`)
+- [x] Decisión: utilizar `git-http-backend` como servidor Git HTTP.
+- [ ] Configurar servidor web (Nginx, Express con CGI, o similar) para redirigir peticiones a `git-http-backend`.
+- [ ] Implementar autenticación HTTP (token JWT o basic auth).
+- [ ] Exponer rutas tipo: `http://<host>/git/<user>/<repo>.git`
+- [ ] Test manual con `git clone`, `git push`, `git pull`
 
-# production mode
-$ yarn run start:prod
-```
+---
 
-## Test
+### 🔐 Acceso Git vía SSH
+- [ ] Configurar `sshd` para acceso controlado desde el usuario `git`.
+- [ ] Registrar clave pública de cada usuario.
+- [ ] Usar `command="..."` en `~/.ssh/authorized_keys` para restringir comandos permitidos.
+- [ ] Validar permisos por usuario/repositorio.
+- [ ] Test con `git clone git@host:user/repo.git`
 
-```bash
-# unit tests
-$ yarn run test
+---
 
-# e2e tests
-$ yarn run test:e2e
+### 📜 Hooks y logs
+- [ ] Crear script `post-receive` para loguear pushes.
+- [ ] Guardar logs en PostgreSQL (user_id, repo_id, action, date, IP)
 
-# test coverage
-$ yarn run test:cov
-```
+---
 
-## Support
+## 🛠️ Stack tentativo
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- **Backend:** NestJS
+- **Base de datos:** PostgreSQL
+- **Git:** Git local + `git-http-backend` + acceso SSH
+- **Autenticación:**
+  - HTTP: JWT (token auth)
+  - SSH: claves públicas autorizadas
+- **Infraestructura:** Docker + servidor SSH + servidor web con CGI o Express
 
-## Stay in touch
+--- 
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 🧾 Notas adicionales
 
-## License
+- En esta primera versión no se contempla frontend.
+- El foco está en entender y controlar el ciclo completo de un backend Git privado.
+- El sistema puede escalar hacia un modelo multiusuario con permisos y logs.
 
-Nest is [MIT licensed](LICENSE).
