@@ -7,27 +7,18 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Repo } from 'src/repos/entities/repo.entity';
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
-  @IsNotEmpty()
-  @IsString()
-  @MinLength(3)
+  @Column({ length: 30, nullable: false })
   username: string;
 
-  @Column({ unique: true })
-  @IsEmail()
-  @IsNotEmpty()
+  @Column({ unique: true, length: 255, nullable: false })
   email: string;
 
-  @Column()
-  @IsNotEmpty()
-  @IsString()
-  @MinLength(8)
+  @Column({ length: 512, nullable: false })
   passwordHash: string;
 
   @Column({ type: 'text', array: true, nullable: true })

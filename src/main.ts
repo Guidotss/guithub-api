@@ -1,10 +1,11 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from '@nestjs/common';
-import * as dotenv from 'dotenv';
-dotenv.config();
 import { envs } from './config/envs';
 
 async function bootstrap() {
@@ -20,6 +21,7 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
   const config = new DocumentBuilder()
@@ -27,9 +29,16 @@ async function bootstrap() {
     .setDescription('The GuitHub API description')
     .setVersion('1.0')
     .addTag('guitHub')
+    .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  const document = SwaggerModule.createDocument(app, config, {
+    deepScanRoutes: true,
+  });
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
   await app.listen(envs.app.PORT);
   logger.log(`Server is running on port ${envs.app.PORT}`);
   logger.log(
