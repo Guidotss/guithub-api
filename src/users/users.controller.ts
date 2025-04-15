@@ -46,7 +46,7 @@ export class UsersController {
       const result = await this.usersService.create(createUserDto);
       return response
         .status(201)
-        .json({ ok: true, message: 'User created', data: result });
+        .json({ ok: true, message: 'User created', result });
     } catch (error) {
       return this.handleError(error, response);
     }

@@ -16,5 +16,6 @@ import { DatabaseModule } from '../database/database.module';
       useValue: BcryptAdapter.hash,
     },
   ],
+  exports: [UsersService],
 })
 export class UsersModule {}
