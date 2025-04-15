@@ -4,6 +4,7 @@ import { LoginDto } from './dto/login.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomError } from 'src/common/erros/custom-error';
 import { Response } from 'express';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -19,6 +20,21 @@ export class AuthController {
     return response
       .status(500)
       .json({ ok: false, message: 'Internal server error' });
+  }
+
+  @Post('register')
+  async register(
+    @Body() createUserDto: CreateUserDto,
+    @Res() response: Response,
+  ) {
+    try {
+      const result = await this.authService.register(createUserDto);
+      return response
+        .status(201)
+        .json({ ok: true, message: 'User created successfully', result });
+    } catch (error) {
+      return this.handleError(error, response);
+    }
   }
 
   @Post('login')

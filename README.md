@@ -12,7 +12,7 @@
 ---
 
 ### 🔐 Autenticación y usuarios
-- [x] Endpoint de registro (`POST /users`)
+- [x] Endpoint de registro (`POST /auth/register`)
 - [x] Endpoint de login (`POST /auth/login`)
 - [ ] Middleware JWT para proteger rutas privadas
 - [ ] Gestión de claves SSH por usuario (alta y baja)

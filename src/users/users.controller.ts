@@ -1,17 +1,14 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
   Patch,
   Param,
   Delete,
   ParseUUIDPipe,
   Logger,
-  Res,
+  Body,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomError } from 'src/common/erros/custom-error';
@@ -34,21 +31,6 @@ export class UsersController {
       return response
         .status(500)
         .json({ ok: false, message: 'Internal server error' });
-    }
-  }
-
-  @Post()
-  async create(
-    @Body() createUserDto: CreateUserDto,
-    @Res() response: Response,
-  ) {
-    try {
-      const result = await this.usersService.create(createUserDto);
-      return response
-        .status(201)
-        .json({ ok: true, message: 'User created', result });
-    } catch (error) {
-      return this.handleError(error, response);
     }
   }
 
