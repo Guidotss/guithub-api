@@ -9,7 +9,7 @@ import { envs } from './config/envs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const logger = new Logger('Github API');
+  const logger = new Logger('GuitHub API');
   app.enableCors({
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -23,10 +23,10 @@ async function bootstrap() {
     }),
   );
   const config = new DocumentBuilder()
-    .setTitle('Github API')
-    .setDescription('The Github API description')
+    .setTitle('GuitHub API')
+    .setDescription('The GuitHub API description')
     .setVersion('1.0')
-    .addTag('guithub')
+    .addTag('guitHub')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
