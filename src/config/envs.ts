@@ -10,7 +10,7 @@ const databaseEnvs = [
 
 const authEnvs = ['JWT_SECRET', 'JWT_EXPIRATION_TIME'] as const;
 
-const appEnvs = ['PORT'] as const;
+const appEnvs = ['PORT', 'AUTH_KEYS_PATH'] as const;
 
 const requiredEnvs = [...databaseEnvs, ...authEnvs, ...appEnvs];
 
@@ -36,5 +36,6 @@ export const envs: Envs = {
 
   app: {
     PORT: +process.env.PORT,
+    AUTH_KEYS_PATH: process.env.AUTH_KEYS_PATH,
   },
 } as const;
