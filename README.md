@@ -12,11 +12,11 @@
 ---
 
 ### 🔐 Autenticación y usuarios
-- [ ] Endpoint de registro (`POST /auth/register`)
-- [ ] Endpoint de login (`POST /auth/login`)
+- [x] Endpoint de registro (`POST /users`)
+- [x] Endpoint de login (`POST /auth/login`)
 - [ ] Middleware JWT para proteger rutas privadas
 - [ ] Gestión de claves SSH por usuario (alta y baja)
-- [ ] Modelo de usuarios en PostgreSQL (id, username, password hash, email, ssh_keys[])
+- [x] Modelo de usuarios en PostgreSQL (id, username, password hash, email, ssh_keys[])
 
 ---
 
