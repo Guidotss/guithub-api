@@ -15,6 +15,6 @@ export class SshKey {
   @Column({ default: true, name: 'active' })
   active: boolean;
 
-  @ManyToOne(() => User, (user) => user.sshKeys)
+  @ManyToOne(() => User, (user) => user.sshKeys, { onDelete: 'CASCADE' })
   user: User;
 }

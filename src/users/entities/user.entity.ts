@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Repo } from 'src/repos/entities/repo.entity';
+import { SshKey } from 'src/ssh/entities/ssh.entity';
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -21,8 +22,8 @@ export class User {
   @Column({ length: 512, nullable: false })
   passwordHash: string;
 
-  @Column({ type: 'text', array: true, nullable: true })
-  sshKeys: string[];
+  @OneToMany(() => SshKey, (sshKey) => sshKey.user)
+  sshKeys: SshKey[];
 
   @CreateDateColumn()
   createdAt: Date;

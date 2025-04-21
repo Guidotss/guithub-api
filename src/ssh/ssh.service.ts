@@ -11,6 +11,7 @@ import { promises as fs } from 'fs';
 import { envs } from 'src/config/envs';
 import { CustomError } from 'src/common/erros/custom-error';
 import { UsersService } from 'src/users/users.service';
+import * as path from 'path';
 
 @Injectable()
 export class SshKeysService {
@@ -43,15 +44,43 @@ export class SshKeysService {
     const keys = await this.keyRepo.find({
       where: { active: true },
       relations: ['user'],
+      select: {
+        user: {
+          username: true,
+          id: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
     });
 
     const content = keys
       .map((k) => {
+        if (!k.user || !k.user.username) {
+          this.logger.error(`Invalid key data: ${JSON.stringify(k)}`);
+          throw new CustomError(
+            'Invalid key data: user or username is missing',
+            500,
+          );
+        }
         return `command=\"GIT_USER=${k.user.username} git-shell -c \"$SSH_ORIGINAL_COMMAND\"\",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ${k.publicKey}`;
       })
       .join('\n');
 
-    await fs.writeFile(this.AUTH_KEYS_PATH, content + '\n');
+    const filePath = path.join(process.cwd(), this.AUTH_KEYS_PATH);
+
+    const dirPath = path.dirname(filePath);
+    try {
+      await fs.access(dirPath);
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        await fs.mkdir(dirPath, { recursive: true });
+      } else {
+        throw error;
+      }
+    }
+    await fs.writeFile(filePath, content + '\n');
   }
 
   async remove(keyId: number): Promise<void> {

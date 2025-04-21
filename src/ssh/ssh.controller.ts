@@ -14,7 +14,7 @@ import { CreateSshKeyDto } from './dto/create-ssh.dto';
 export class SshController {
   constructor(private readonly sshKeysService: SshKeysService) {}
 
-  @Post()
+  @Post(':id')
   create(
     @Param('id', ParseUUIDPipe) userId: string,
     @Body() createSshKeyDto: CreateSshKeyDto,
