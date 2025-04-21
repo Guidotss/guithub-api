@@ -14,6 +14,7 @@ export type AuthConfig = {
 export type AppConfig = {
   PORT: number;
   AUTH_KEYS_PATH: string;
+  IS_DEV: boolean;
 };
 
 export type Envs = {

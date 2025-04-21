@@ -37,5 +37,6 @@ export const envs: Envs = {
   app: {
     PORT: +process.env.PORT,
     AUTH_KEYS_PATH: process.env.AUTH_KEYS_PATH,
+    IS_DEV: process.env.NODE_ENV === 'development',
   },
 } as const;
